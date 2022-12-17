@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+BSC_CONFIG=${BSC_HOME}/config/config.toml
+BSC_GENESIS=${BSC_HOME}/config/genesis.json
+DATA_DIR=$(cat ${BSC_CONFIG} | grep -A1 '\[Node\]' | grep -oP '\"\K.*?(?=\")')
+
+GETH_DIR=${DATA_DIR}/geth
+if [ ! -d "$GETH_DIR" ]; then
+  geth --datadir ${DATA_DIR} init ${BSC_GENESIS}
+fi
+
+exec "geth" "--config" ${BSC_CONFIG} "--datadir" ${DATA_DIR} "--cache" "60416" "--rpc.allow-unprotected-txs" "--txlookuplimit" "0" "--txpool.reannouncetime" "5m" "--diffsync" "$@"
