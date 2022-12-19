@@ -10,4 +10,5 @@ if [ ! -d "$GETH_DIR" ]; then
   geth --datadir ${DATA_DIR} init ${BSC_GENESIS}
 fi
 
-exec "geth" "--config" ${BSC_CONFIG} "--datadir" ${DATA_DIR} "--cache" "60416" "--rpc.allow-unprotected-txs" "--txlookuplimit" "0" "--txpool.reannouncetime" "5m" "--diffsync" "$@"
+
+exec "geth" "--config" ${BSC_CONFIG} "--datadir" ${DATA_DIR} "--syncmode" "light" "$@"
